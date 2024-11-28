@@ -1,19 +1,21 @@
-import { useState } from 'react';
+import { AnyFilterConfig, FilterMap, FilterValue } from '../models';
 
 interface Props {
-    filters?: any;
-    onFiltersChanged: (filters: any) => void;
+    filters?: FilterMap;
+    configurations?: AnyFilterConfig[];
+    onFiltersChanged: (filters: FilterMap) => void;
 }
 
-export const Filterbar = ({ filters, onFiltersChanged }: Props) => {
-    const [name, setName] = useState(filters?.name);
-    const [version, setVersion] = useState(filters?.version);
+const FilterInput = ({ config, value, onChange }: { config: AnyFilterConfig, value: FilterValue, onChange: (v: string) => void }) => {
+    return (
+        <input type='text' placeholder={config.label} value={value} onChange={(e) => onChange(e.target.value)} />
+    )
+}
 
+export const Filterbar = ({ filters, configurations, onFiltersChanged }: Props) => {
     return (
         <div>
-            <input type="text" placeholder="Search by name" value={name} onChange={(e) => setName(e.target.value)} />
-            <input type="text" placeholder="Search by version" value={version} onChange={(e) => setVersion(e.target.value)} />
-            <button onClick={() => onFiltersChanged({ name, version })}>Apply</button>
+            {configurations?.map((config) => <FilterInput key={config.id} config={config} value={filters?.[config.id] || ''} onChange={(v) => onFiltersChanged({ ...filters, [config.id]: v })} />)}
         </div>
     )
 }

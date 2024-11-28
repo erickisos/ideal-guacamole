@@ -1,4 +1,4 @@
-import { Framework } from '../modules';
+import { Framework } from '../models';
 
 export interface DashboardProps {
     frameworks: Framework[];
